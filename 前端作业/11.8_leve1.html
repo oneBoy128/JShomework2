@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+<script>
+    //递推方法
+    function factorial(n)
+    {   
+        let s = 1;
+        for(var i = 1;i<=n;i++)
+        {
+            s *= i;
+        }
+        return s;
+    }
+    let n = 7;
+    console.log(factorial(n));
+
+    //递归方法
+    function factorial(n)
+    {
+        if(n==1)
+        {
+            return 1;
+        }
+        else
+        {
+            return factorial(n-1)*n;
+        }
+    }
+    console.log(factorial(n));
+</script>
+</head>
+<body>
+    
+</body>
+</html>

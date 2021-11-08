@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+<script>
+    //先创建一个对象
+    function Person(name,age,gender)
+    {
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.filed = {name:'oneboy'};
+        this.shuzu = [1,2,3];
+    }
+    let ming = new Person("小明",18,'男');
+    //深拷贝就是在浅拷贝的基础上，把带有指针和引用类型的变量指向一个新内存，把内存中的值跟原对象中的值一样
+    //现在差不多直到怎么实现一个深拷贝，但是什么时候我该判断要用到指向一个新内存的时候呢？
+    //我想到在C++中几乎任何数据类型只用浅拷贝就不会造成任何危害，唯独指针类型和引用类型要单独实现拷贝功能防止浅拷贝带来的危害
+    //而JS中跟指针差不多的目前为止我只知道用new创建出的对象名了，所以如果是一个object那么就是一个存放地址的数据类型
+    //因而有了上述条件后差不多有了思路。
+    function copy_Person(target)
+    {
+        if(target instanceof Object)//如果判断的是一个引用数据类型
+        {   
+            let newPerson = new Person();//如果是一个引用对象,那么就申请一个新的内存，这个内存中只是值跟老对象中引用数据类型的值一样
+            for(let k in target)
+            {
+                newPerson[k] = copy_Person(target[k]);//利用递归来进行引用数据类型的判断以及后继新内存的申请
+            }
+            return newPerson;
+        }
+        else//如果判断的不是一个引用数据类型
+        {
+            return target;
+        }
+    }
+    let ming2 = copy_Person(ming);
+    console.log(ming);
+    console.log(ming2);
+    //本以为上述的就已经实现,但是JS又给了我一个响亮的耳光,并掐着我的脖子告诉我：“数组这个数据类型要单独考虑！！！”
+    //因而在又一次查看链接后，写了如下的改进
+    function copy_Person(target)
+    {
+        if(target instanceof Object)//如果判断的是一个引用数据类型
+        {   
+            let newPerson = Array.isArray(target) ? [] : new Person();
+            for(let k in target)
+            {
+                newPerson[k] = copy_Person(target[k]);//利用递归来进行引用数据类型的判断以及后继新内存的申请
+            }
+            return newPerson;
+        }
+        else//如果判断的不是一个引用数据类型
+        {
+            return target;
+        }
+    }
+    let ming3 = copy_Person(ming);
+    console.log(ming3);
+</script>
+</head>
+<body>
+    
+</body>
+</html>

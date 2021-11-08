@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+<script>
+    //先创建一个对象
+    function Person(name,age,gender)
+    {
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+    }
+    let ming = new Person("小明",18,'男');
+    
+    //一开始我以为JS中的浅拷贝与C++的浅拷贝大同小异,因而我最开始尝试的是这个
+    let ming_son = ming;
+    console.log(ming);
+    console.log(ming_son);
+    //上面输出都没问题,我以为JS的浅拷贝就跟C++语法一样
+    //但是当我看到JS中利用new来创建对象的内存构造后JS狠狠的打了我一耳光，告诉我C++是C++,JS是JS,这不是一个浅拷贝构造函数
+    //实际上，我上述的操作中只是让二者的指向地址是同一个，我这么写相当于把一个指针的值传给另一个指针而已，这跟浅拷贝的定义完全不一样
+    //所谓浅拷贝，哪怕是后继产生的危害，都应该是在两个内存中实现，拷贝出来的对象应该是在跟被拷贝内存空间一样大的内存中,包括后继引用成员。
+    //也就是说在JS中真正的浅拷贝,也同样要在一个堆区中申请一个跟原对象一样空间大小的内存,然后所有的值都一样
+    //但是涉及到向堆区申请内存,我第一时间想到的是JS是否有指针？可惜没有或者是我没有查到
+    //但是JS中new关键字中让对象名这个内存中存放的是地址,而这个地址指向堆区的一个内存空间,这不正是我想要的么？于是一不做二不休的实现了下面的代码
+    function copy_Person(oldPerson)
+    {
+        let ming_son2 = new Person();//先向堆区申请一个与oldPerson一样大小的内存
+        for(const k in oldPerson)//遍历老对象
+        {   
+            ming_son2[k] = oldPerson[k];//赋值新对象
+        }
+        return ming_son2;
+    }
+    ming_son = copy_Person(ming);//得到新对象
+    console.log(ming_son);//完成
+</script>
+</head>
+<body>
+    
+</body>
+</html>
